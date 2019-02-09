@@ -96,5 +96,5 @@ app.get('/image', (req,res)=>{
 	res.sendFile(__dirname+"/public/image.gif");
 });
 
-app.listen(80);
+app.listen(process.env.PORT||80);
 console.log("server is running on port 80");
