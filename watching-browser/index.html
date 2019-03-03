@@ -1,0 +1,26 @@
+<html>
+<head>
+    <script type="text/javascript">
+
+      window.addEventListener('load', windowLoaded);
+
+      function windowLoaded() {
+          // for every event you want
+          // https://www.w3schools.com/jsref/dom_obj_event.asp 
+
+          document.addEventListener('mousemove', mouseMoved);
+          
+      }
+
+      function mouseMoved(e){
+          console.log('mouse has moved', e);
+          document.getElementById("mousetracker").style.left=e.clientX+'px';
+          document.getElementById("mousetracker").style.top=e.clientY+'px';
+      }
+
+    </script>
+</head>
+<body>
+<div id="mousetracker" style="position: absolute; background-color:blue; width: 50px; height: 50px"></div>
+</body>
+</html>
