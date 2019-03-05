@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.24/peerjs.min.js"></script>
+        <meta charset="UTF-8" />
+    <script>
+        var peer = null;
+//       peer = new Peer({host: 'ra2548-2.itp.io', port: 9000, path: '/'});
+
+
+       var peer = new Peer('094abaed-560e-4261-887b-6b05e68762d4',{path: '/'});
+//var peer = new Peer({host: 'liveweb-new.itp.io', port: 9000, path: '/'});
+
+        peer.on('open', function(id){
+            console.log('My id is:' + id);
+            peer_id = id;
+        });
+        peer.on('error', function(err){
+            console.log(err);
+        });
+
+        function initwebrtc(stream){
+            mystream = stream;
+            let call = peer.call("14ce2243-9b3d-47b2-a672-f73a7c30bd6c-watcher",mystream);
+            //var call = peer.call("14ce2243-9b3d-47b2-a672-f73a7c30bd6c-watcher",mystream);
+            call.on('stream', function(remoteStream){
+                console.log("got a response");
+            });
+        };
+peer.on('call', function(incoming_call) {
+	console.log("Got a call!");
+	incoming_call.answer(mystream); // Answer the call with our stream from getUserMedia
+	incoming_call.on('stream', function(remoteStream) {  // we receive a getUserMedia stream from the remote caller
+		// Don't do anything
+	});
+});
+
+
+    </script>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.2/addons/p5.sound.min.js"></script>
+    <script>
+        let videoElement = document.getElementById("video");
+        let logElement = document.getElementById("log");
+
+        function log(msg) {
+         logElement.innerHTML += msg + "<br>";
+        }
+        window.addEventListener("load", function() {
+          navigator.mediaDevices.getUserMedia({
+              video: {
+                width: 160,
+                height: 120,
+                frameRate: 15
+              }
+          }).then(stream => videoElement.srcObject = stream)
+            .catch(err => log(err.name + ": " + err.message));
+        }, false);
+    </script>
+    </head>
+    <body>
+        <video id="video" width="160" height="120" autoplay></video><br>
+        <div id="log"></div>
+        <!-- had to add processing script -->
+<script>let turkey;
+
+function setup() {
+  createCanvas(400, 400);
+  
+  turkey = createCapture('VIDEO', captureCallback);
+  turkey.hide();
+}
+
+function captureCallback(s) {
+  initwebrtc(s);
+}
+
+function draw() {
+  background(220);
+
+    image(turkey, 0, 0);
+
+  loadPixels();
+  for (let i = 0; i < pixels.length; i+=4) {
+    let r = pixels[i];
+    let g = pixels[i+1];
+    let b = pixels[i+2];
+    
+    // There is probably a better way to do threshold?
+    if (r+b+g > 200) {
+      pixels[i] = 255;
+      pixels[i+1] = 255;
+      pixels[i+2] = 255;
+    } else {
+      pixels[i] = 0;
+      pixels[i+1] = 0;
+      pixels[i+2] = 0;
+    }
+  }
+  updatePixels();
+  
+}</script>
+  
+    </body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.24/peerjs.min.js"></script>
+        <script>
+            let myvideo = null;
+            let mystream  = null;
+            let mypeerid = null;
+            let peer = null;
+
+            let init = function(){
+                myvideo = document.getElementById('myvideo');
+                window.URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+                if(navigator.getUserMedia){
+                    navigator.getUserMedia({video:true, audio: false}, function(stream){
+                        mystream = stream;
+                        myvideo.srcObject = stream;
+
+                        myvideo.onloadedmetadata = function(e){
+                            myvideo.play();
+                            connectPeer();
+                            console.log(e);
+                        };
+                    }, function(err){
+                        console.log('failed to get local stream', err);
+                        alert("failed to get local stream " +err);
+                    });
+                };
+            }
+            function connectPeer(){
+                peer = new Peer('14ce2243-9b3d-47b2-a672-f73a7c30bd6c-watcher', { path: '/'});
+//                peer = new Peer('watcher', {host: 'ra2548-2.itp.io', port: 9000, path: '/'});
+//              peer = new Peer('watcher', {path: '/'});
+              //peer = new Peer('watcher',{host: 'liveweb-new.itp.io', port: 9000, path: '/'});
+// server issues??
+
+
+                peer.on('open', function(id){
+                    console.log('my id is: '+ id);
+                    mypeerid = id;
+                });
+
+            peer.on('call', function(call){
+                console.log("Incoming call from", call);
+                call.answer(mystream);
+                call.on('stream', function peerStream(remoteStream){
+                    var othervideo = document.createElement("video");
+                    console.log(remoteStream);
+//                    othervideo.src = window.URL.createObjectURL(remoteStream) || remoteStream;
+//					othervideo.src = window.URL.createObjectURL(remoteStream) || remoteStream;
+                   //
+                    // DEPRECATED ?? 
+                    // https://stackoverflow.com/questions/27120757/failed-to-execute-createobjecturl-on-url
+                    othervideo.srcObject=remoteStream;
+
+                    document.body.appendChild(othervideo);
+                    othervideo.play();
+                    });
+                    });
+                };
+
+            let placecall = function(){
+                let call = peer.call(document.getElementById('other_peer_id').value, mystream);
+                call.on('stream', function(remoteStream){
+                    let othervideo = document.createElement("video");
+                    othervideo.src = window.URL.createObjectURL(remoteStream) || remoteStream;
+                    document.body.appendChild(othervideo);
+                    othervideo.play();
+                });
+            };
+            
+        </script>
+    </head>
+    <body onload="init()">
+        mine:
+        <br>
+        <video id = "myvideo"></video>
+    </body>
+</html>
