@@ -1,43 +1,84 @@
 <html>
-    <head>
-        <title>Ministry of Truth</title>
-        <meta charset="UTF-8" />
-        <script src="https://cdn.jsdelivr.net/npm/peerjs@0.3.20/dist/peer.min.js"></script>
 
-        <script>
-            let peer = null;
-            peer = new Peer('094abaed-560e-4261-887b-6b05e68762d4',{path: '/'});
+<head>
+	<title>Ministry of Truth</title>
+	<meta charset="UTF-8" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" type="text/css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+	<script type="text/javascript">
 
-            peer.on('open', (id)=>{
-                console.log('My id is:' +id);
-                peer_id = id;
-            });
-            
-            peer.on('error', (err)=>{
-                console.log(err);
-            });
-            
-            function initwebrtc(stream){
-                mystream = stream;
-                let call = peer.call("14ce2243-9b3d-47b2-a672-f73a7c30bd6c-watcher",mystream);
-                
-                call.on('stream', (remoteStream)=>{
-                    console.log('Got a response!');
-                });
-            };
+		var socket = io.connect();
+		socket.on('connect', function () {
+			console.log("Connected");
 
-            peer.on('call', (incoming_call)=>{
-                console.log("Got a call!");
-                incoming_call.answer(myStream);
-                incoming_call.on('stream', (remote_stream)=>{
+		});
+		function sendit(evt, message) {
+			socket.emit(evt, message);
+		}
+		// When the window loads
+		window.addEventListener('load', function () {
+			console.log("Window Loaded");
 
-                });
-            });
-        </script>
+			//socket.emit('event', document.body );
+			socket.send('<h1>hi</h1>')
 
-    </head>
+			// Track Whatever you would like
+			//
+			// Mousemove
+			document.addEventListener('mousemove', function (e) {
+				//	console.log(e);
+				//sendit('event', {'event': 'mousemove', x: e.clientX, y: e.clientY});
+			});
+			// Click
+			document.addEventListener('click', function (e) {
+				//console.log(e);
+				//sendit('event', { 'event': 'click', x: e.clientX, y: e.clientY });
+			});
 
-    <body>
-        Hello, world!
-    </body>
+			// Text
+			document.addEventListener('keypress', function (e) {
+				//console.log(e);
+//				sendit('event', { 'event': 'keypress', 'key': e.key });
+			});
+
+
+
+    $('form').submit(function(e){
+      e.preventDefault(); // prevents page reloading
+      socket.emit('headline', $('#m').val());
+        sendit('event', { 'event': 'headline','key': $('#m').val()});
+      $('#m').val('');
+        console.log($('#m').val(''));
+      return false;
+    });
+
+		});
+	</script> 
+<style>
+body{
+    background-color: black;
+    color:white;
+}
+</style>
+</head>
+
+
+<body>
+    <div class = "container">
+        <row>
+            <div class="twelve columns">
+                <h1>Ministry of Truth</h1>
+            </div>
+        </row>
+        <row>
+            <div class="twelve columns">
+                <form actions="">
+                    <input id = "m" value="Headline"  autocomplete="off" /><button id="headline-btn">Send</button>
+                </form>
+            </div>
+        </row>
+    </div>
+</body>
+
 </html>
