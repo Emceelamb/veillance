@@ -1,5 +1,5 @@
 {
-  "name": "Live news editor",
+  "name": "news-editor",
   "description": "Proxy websites and edit live with node-http-proxy and sockets.io.",
   "tags": [
     "http-proxy",
