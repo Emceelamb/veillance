@@ -13,7 +13,6 @@ const http = require('http'),
 const PROXY_PORT = process.env.PORT || 8000,
 	EDITOR_PORT = 9000;
 
-socketServer.listen(EDITOR_PORT);
 app.use(express.static('public'));
 let selects = [];
 let simpleselect = {};
@@ -108,6 +107,8 @@ server.use((req, res) => {
 console.log(`Proxy is up on ${PROXY_PORT}`.green);
 http.createServer(server).listen(PROXY_PORT);
 
+console.log(`Editor is up on ${EDITOR_PORT}`.yellow);
+socketServer.listen(EDITOR_PORT);
 // socket server
 /*
 function handler(req,res){
