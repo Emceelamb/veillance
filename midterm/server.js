@@ -25,7 +25,7 @@ simpleselect.func = function (node) {
     		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 			<script type="text/javascript">
         	console.log('Script injected ;)');
-			var socket = io.connect('http://localhost:9000');
+			var socket = io.connect('http://localhost:8000/editor.html');
 			socket.on('connect', function() {
 				console.log("Connected");
 				socket.emit('watch',{});
@@ -108,7 +108,7 @@ console.log(`Proxy is up on ${PROXY_PORT}`.green);
 http.createServer(server).listen(PROXY_PORT);
 
 console.log(`Editor is up on ${EDITOR_PORT}`.yellow);
-socketServer.listen(EDITOR_PORT);
+//socketServer.listen(PROXY_PORT);
 // socket server
 /*
 function handler(req,res){
