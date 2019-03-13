@@ -1,6 +1,6 @@
 {
-  "name": "harmon",
-  "description": "A piece of middleware for node-http-proxy that allows you to modify the remote service response with trumpet",
+  "name": "Live news editor",
+  "description": "Proxy websites and edit live with node-http-proxy and sockets.io.",
   "tags": [
     "http-proxy",
     "trumpet",
@@ -10,15 +10,15 @@
   ],
   "version": "1.4.3",
   "author": {
-    "name": "Anton Whalley",
-    "email": "anton@venshare.com"
+    "name": "",
+    "email": ""
   },
   "repository": {
-    "type": "git",
-    "url": "git://github.com/No9/harmon.git"
+    "type": "",
+    "url": ""
   },
   "bugs": {
-    "url": "https://github.com/No9/harmon/issues"
+    "url": ""
   },
   "dependencies": {
     "express": "^4.16.4",
@@ -34,6 +34,5 @@
   },
   "scripts": {
     "test": "node test/host.js"
-  },
-  "license": "MIT/X11"
+  }
 }
