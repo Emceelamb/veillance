@@ -92,9 +92,9 @@ let proxy = httpProxy.createProxyServer({
 	// agent: https.globalAgent,
 	// headers: { host: 'www.nytimes.com' }
 
-	target: 'https://foxnews.com',
+	target: 'https://nytimes.com',
 	agent: https.globalAgent,
-	headers: { host: 'www.foxnews.com' }
+	headers: { host: 'www.nytimes.com' }
 });
 
 server.use(require('./')([], selects, true));
